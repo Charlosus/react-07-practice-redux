@@ -32,10 +32,10 @@ const actionSaveUser = {
 
 //2) creating remove action
 
-const actionRemoveUser = {
-  type: 'REMOVE_USER',
-  payload: 1, // here all we need is a id of specific record we want to remove
-};
+// const actionRemoveUser = {
+//   type: 'REMOVE_USER',
+//   payload: 1, // here all we need is a id of specific record we want to remove
+// };
 
 // now that we have our action specified
 // we need to 'learn' our 'storage worker'(reducer) how to interpret
