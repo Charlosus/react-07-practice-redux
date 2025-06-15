@@ -119,3 +119,75 @@ export const deleteTask = createAction("tasks/deleteTask");
 export const toggleCompleted = createAction("tasks/toggleCompleted");
 
 export const setStatusFilter = createAction("filters/setStatusFilter");
+
+import { createAction } from "@reduxjs/toolkit";
+
+const addTask = createAction("tasks/AddTask");
+
+// Kreator akcji ma właściwość type
+console.log(addTask.type); // "tasks/AddTask"
+
+// Metoda toString() funkcji addTask została przedefiniowana
+console.log(addTask.toString()); // "tasks/AddTask"
+
+// =====================================================================
+
+// lets change redures to use toolkit
+
+import { addTask, deleteTask, toggleCompleted } from "./actions";
+
+export const tasksReducer = (state = tasksInitialState, action) => {
+    switch (action.type) {
+        case addTask.type: 
+        return [...state, action.payload];
+
+        case deleteTask.type: 
+        return state.filter(task => task.id !== action.payload);
+
+        case toggleCompleted.type:
+            return state.map(task => {
+                if (task.id !== action.payload) {
+                    return task;
+                }
+                return {...task, completed: !task.completed};
+            });
+
+            default: 
+            return state;
+    }
+};
+
+//========================================================================
+
+//here is construction of createAction
+
+createAction(type, prepareAction)
+
+// if we want to add special properties to this action for example add
+// unique id 
+import { createAction, nanoid } from "@reduxjs/toolkit";
+
+export const addTask = createAction('tasks/addTask', text => {
+    return {
+        payload: {
+            text,
+            id: nanoid(),
+            completed: false
+        }
+    }
+})
+console.log(addTask("Learn Redux Toolkit"));
+/**
+ * {
+ *   type: 'tasks/addTask',
+ *   payload: {
+ *     text: 'Learn Redux Toolkit',
+ *     id: '4AJvwMSWEHCchcWYga3dj',
+ *     completed: false
+ *   }
+ * }
+ **/
+
+// ======================================================================
+
+// 
