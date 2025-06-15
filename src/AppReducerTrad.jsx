@@ -65,7 +65,7 @@ export const store = createStore(rootReducer);
 
 // src/redux/store.js
 
-import { createStore } from 'redux';
+import { combineReducers, createStore } from 'redux';
 import { devToolsEnhancer } from '@redux-devtools/extension';
 
 const initialState1 = {
@@ -358,21 +358,20 @@ export const Task = ({ task }) => {
 
 //==========================================================================
 
-// 12) Now lets add filter buttons that shows desierable tasks 
+// 12) Now lets add filter buttons that shows desierable tasks
 
 import { useSelector, useDispatch } from 'react-redux';
-// importing hooks 
-import {setStatusFilter} from '../redux/actions';
-// importing object with filter options 
-import {statusFilter} from "../../redux/constants";
+// importing hooks
+import { setStatusFilter } from '../redux/actions';
+// importing object with filter options
+import { statusFilter } from '../../redux/constants';
 
 export const StatusFilter = () => {
   const dispatch = useDispatch();
 
-  const filter = useSelector(state => state.statusFilter);
+  const filter = useSelector((state) => state.statusFilter);
 
-  const handleFilterChange = filter => 
-    dispatch(setStatusFilter(filter));
+  const handleFilterChange = (filter) => dispatch(setStatusFilter(filter));
 
   return (
     <div>
@@ -399,119 +398,117 @@ export const StatusFilter = () => {
 };
 //========================================================================
 
-// 13) Reducer - function that recive initial state and action and return changed 
-// state defined by action 
+// 13) Reducer - function that recive initial state and action and return changed
+// state defined by action
 
-
-import { statusFilters } from "./constants";
+import { statusFilters } from './constants';
 
 const initialState = {
   tasks: [
-    { id: 0, text: "Learn HTML and CSS", completed: true },
-    { id: 1, text: "Get good at JavaScript", completed: true },
-    { id: 2, text: "Master React", completed: false },
-    { id: 3, text: "Discover Redux", completed: false },
-    { id: 4, text: "Build amazing apps", completed: false },
+    { id: 0, text: 'Learn HTML and CSS', completed: true },
+    { id: 1, text: 'Get good at JavaScript', completed: true },
+    { id: 2, text: 'Master React', completed: false },
+    { id: 3, text: 'Discover Redux', completed: false },
+    { id: 4, text: 'Build amazing apps', completed: false },
   ],
   filters: {
     status: statusFilters.all,
   },
 };
 
-// we are using initialstate as a default value 
-export const rootReducer =(state = initialState, action) => {
-  // reducer read a type form action and basing on it will commite changes to initial state 
+// we are using initialstate as a default value
+export const rootReducer = (state = initialState, action) => {
+  // reducer read a type form action and basing on it will commite changes to initial state
   switch (action.type) {
-    // here we defiene types and changes we want to ocure 
-    default: // every reductor recives action send from store 
-    // if we dont want reductore to service not described action we 
-    // want it to return state unchanged 
-    return state;
+    // here we defiene types and changes we want to ocure
+    default: // every reductor recives action send from store
+      // if we dont want reductore to service not described action we
+      // want it to return state unchanged
+      return state;
   }
 };
 
 // =====================================================================
-// 14) adding add functionality to our reducer 
+// 14) adding add functionality to our reducer
 
 export const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'task/addTask' : {
-      // first we need to return new state object 
+    case 'task/addTask': {
+      // first we need to return new state object
       return {
-        // new object need to contain all previus elements 
+        // new object need to contain all previus elements
         // so its good to use spread/rest operator
         ...state,
-        // and we add new array with task 
+        // and we add new array with task
         tasks: [
-          ...state.tasks, 
+          ...state.tasks,
           action.payload,
-          // things passed by action 
+          // things passed by action
         ],
       };
     }
     default:
-      // and here are actions that are nod described in Reducer 
+      // and here are actions that are nod described in Reducer
       return state;
   }
 };
-// Reducers should not change their arguments (state and action). 
-// Their sole purpose is to handle the action by returning a new 
+// Reducers should not change their arguments (state and action).
+// Their sole purpose is to handle the action by returning a new
 // state based on the current state and action.
 
-// Reducers should not change the state. Instead, reducers 
-// should update by copying the existing state and making 
+// Reducers should not change the state. Instead, reducers
+// should update by copying the existing state and making
 // changes to the copy.
 
-// Reducers should not perform any “side effects” such as 
-// starting a timer, making HTTP requests, changing values 
-// ​​outside the function or its arguments, generating random 
+// Reducers should not perform any “side effects” such as
+// starting a timer, making HTTP requests, changing values
+// ​​outside the function or its arguments, generating random
 // numbers or strings, etc.
-
 
 export const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     // previous code
     case 'tasks/deleteTask':
       return {
-        ...state, 
-        tasks: state.tasks.filter(task => task.id !== action.payload),
+        ...state,
+        tasks: state.tasks.filter((task) => task.id !== action.payload),
       };
-      default:
-        return state;
+    default:
+      return state;
   }
 };
 
-// and lets add toggle option 
+// and lets add toggle option
 
 export const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-		// Poprzedni kod case "tasks/addTask"
+    // Poprzedni kod case "tasks/addTask"
 
-		// Poprzedni kod case "tasks/deleteTask"
+    // Poprzedni kod case "tasks/deleteTask"
 
     case 'tasks/toggleCompleted':
       return {
         ...state,
-        tasks: state.tasks.map( task => {
+        tasks: state.tasks.map((task) => {
           if (task.id !== action.payload) {
             return task;
           }
           return {
-            ...task, 
-            completed: !task.completed
+            ...task,
+            completed: !task.completed,
           };
         }),
       };
 
-      // and now lets add case to filter
-      case 'filters/setStatusFilter':
-        return {
-          ...state, 
-          filters: {
-            ...state.filters,
-            status: action.payload,
-          },
-        };
+    // and now lets add case to filter
+    case 'filters/setStatusFilter':
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          status: action.payload,
+        },
+      };
     default:
       return state;
   }
@@ -519,3 +516,64 @@ export const rootReducer = (state = initialState, action) => {
 // =========================================================================
 
 // HOW ever out reducer is now rather big and looong (thats what she said xD)
+
+// what can we do is to split it to two smaller one one that
+// will be responsible for tasks and second for status
+
+const tasksInitialState = [
+  { id: 0, text: 'Learn HTML and CSS', completed: true },
+  { id: 1, text: 'Get good at JavaScript', completed: true },
+  { id: 2, text: 'Master React', completed: false },
+  { id: 3, text: 'Discover Redux', completed: false },
+  { id: 4, text: 'Build amazing apps', completed: false },
+];
+
+const tasksReducer = (state = tasksInitialState, action) => {
+  switch (action.type) {
+    case 'tasks/addTask':
+      return [...state, action.payload];
+    case 'tasks/deleteTask':
+      return state.filter((task) => task.id !== action.payload);
+    case 'tasks/toggleCompleted':
+      return state.map(task => {
+        if (task.id !== action.payload) {
+          return task;
+        }
+        return { ...task, completed: !task.completed };
+      });
+      default: 
+      return state;
+  }
+};
+
+const filtersInitialState = {
+  status: statusFilter.all,
+};
+
+const filterReducer = (state = filtersInitialState, action) => {
+  switch (action.type) {
+    case 'filters/setStatusFilter': 
+    return {
+      ...state,
+      status: action.payload,
+    };
+    default: 
+    return state;
+  }}
+
+  // now we connect those two reducer in one 
+
+  export const rootReducer = (state = {}, action) => {
+    return {
+      tasks: tasksReducer(state.tasks, action),
+      filters: filterReducer(state.filters, action),
+    };
+  };
+
+  // but libr offer option to combine it 
+  import { combineReducers } from 'redux';
+
+  export const rootReducer = combineReducers({
+    tasks: tasksReducer,
+    filters: filterReducer,
+  });
